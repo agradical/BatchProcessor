@@ -1,4 +1,4 @@
-package com.utd.cs5348.exceptions;
+package com.exceptions;
 
 public class ProcessException {
 

@@ -1,4 +1,4 @@
-package com.utd.cs5348.command;
+package com.command;
 
 public class CmdCommand implements Command {
 
