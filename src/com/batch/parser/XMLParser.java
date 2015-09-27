@@ -1,4 +1,4 @@
-package com.batchparser;
+package com.batch.parser;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -11,6 +11,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import com.batch.Batch;
 import com.command.CmdCommand;
 import com.command.Command;
 import com.command.FileCommand;
@@ -23,14 +24,15 @@ public class XMLParser {
 	public static void main (String args[]) {
 		
 		String OS = System.getProperty("os.name").toLowerCase();		
+		
 		String filename = null;
 		if (args.length > 0) {
-			filename = OS+"_"+args[0];
+				filename = args[0];
 		} else {
 			if (OS.indexOf("windows") >= 0) {
-				filename = "input/win_batch1.xml";
+				filename = "work\batch1.dos.xml";
 			} else if (OS.indexOf("linux") >= 0) {
-				filename = "input/linux_batch1.xml";
+				filename = "work/batch1.unix.xml";
 			} else {
 				System.out.println("Your OS type input not supported");
 				return;
@@ -61,13 +63,18 @@ public class XMLParser {
 			e.printStackTrace();
 		}
 		
+		System.out.println("Executing batch");
+		Batch batch =  new Batch();
+		batch.executeBatch();
 	}
 
 	public static void parseCommand(Element elem) throws ProcessException{
 		String cmdName = elem.getNodeName();
+		System.out.println(cmdName+" ----------");
 		
-		if (cmdName == null) {
-			throw new ProcessException("unable to parse command from " + elem.getTextContent());
+		if (cmdName == null || cmdName.trim().length() == 0) {
+			throw new ProcessException("unable to parse command from "
+		                                + elem.getTextContent());
 		}
 		else if ("wd".equalsIgnoreCase(cmdName)) {
 			System.out.println("Parsing wd");
@@ -83,6 +90,7 @@ public class XMLParser {
 			System.out.println("Parsing cmd");
 			Command cmd = new CmdCommand();
 			cmd.parse(elem);
+			
 		}
 		else if ("pipe".equalsIgnoreCase(cmdName)) {
 			System.out.println("Parsing pipe");
@@ -92,8 +100,8 @@ public class XMLParser {
 		else {
 			throw new ProcessException("Unknown command " + cmdName + " from: " + elem.getBaseURI());
 		}
-	}
-	
+		
+	}	
 
 }
 

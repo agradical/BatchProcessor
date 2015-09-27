@@ -1,16 +1,15 @@
 package com.command;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.IOException;
 
 import org.w3c.dom.Element;
 
-public interface Command {
+import com.exceptions.ProcessException;
+
+public abstract class Command {
 	
-	public static List<Element> CommandList = new ArrayList<Element>();
-	
-	public void parse(Element elem);
-	public void execute();
-	public String describe();
+	public abstract void parse(Element elem) throws ProcessException;
+	public abstract void execute() throws IOException, InterruptedException, ProcessException;
+	public abstract String describe();
 	
 }
